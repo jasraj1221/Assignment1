@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Speech to Text Converter</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>Speech to Text Converter</h1>
+
+        <p class="description">
+            Record your voice and convert it into text.
+        </p>
+
+        <!-- Shows the current recording status -->
+        <p id="status">Ready to record</p>
+
+        <!-- Recording buttons -->
+        <div class="buttons">
+            <button id="startButton">Start Recording</button>
+            <button id="stopButton" disabled>Stop Recording</button>
+        </div>
+
+        <!-- Transcription result -->
+        <div class="result">
+            <h2>Transcription</h2>
+
+            <p id="transcription">
+                Your transcription will appear here.
+            </p>
+        </div>
+
+    </div>
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>
