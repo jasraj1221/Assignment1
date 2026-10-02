@@ -9,15 +9,18 @@ import org.springframework.http.client.MultipartBodyBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.multipart.MultipartFile;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Service
 public class TranscriptionService {
 
     private final RestClient restClient;
+    private final StatsService statsService;
 
      // Create a RestClient to communicate with OpenAI
-        public TranscriptionService() {
+        public TranscriptionService(StatsService statsService) {
             this.restClient = RestClient.create();
+            this.statsService = statsService;
         }
 
     // Send the recorded audio to OpenAI
@@ -61,12 +64,23 @@ public class TranscriptionService {
         if (result == null || result.text() == null) {
             throw new IllegalStateException("No transcription received");
         }
+        
+        if (result.usage() != null) {
+            statsService.addTokens(
+                    result.usage().inputTokens(),
+                    result.usage().outputTokens());
+        }
 
         // Return the converted speech as text
         return result.text();
     }
 
     // Stores the text returned by the OpenAI API
-    private record TranscriptionResult(String text) {
+    private record TranscriptionResult(String text, Usage usage) {
+    }
+
+    private record Usage(
+            @JsonProperty("input_tokens") long inputTokens,
+            @JsonProperty("output_tokens") long outputTokens) {
     }
 }

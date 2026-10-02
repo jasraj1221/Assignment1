@@ -11,15 +11,22 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
 
 @RestController
 public class AdminController {
 
-    private Instant startTime = Instant.now();
+	private Instant startTime;
     private final ConfigurableApplicationContext context;
 
     public AdminController(ConfigurableApplicationContext context) {
         this.context = context;
+    }
+    
+    @EventListener(ApplicationReadyEvent.class)
+    public void serverReady() {
+        startTime = Instant.now();
     }
 
     // Shows how long the server has been running
